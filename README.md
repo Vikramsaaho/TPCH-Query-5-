@@ -1,109 +1,103 @@
-# TPCH Query 5 C++ Multithreading Project
+# 🚀 TPCH Query 5 - C++ Multithreading
 
-## Overview
-Task is to implement TPCH Query 5 using C++ and multithreading. 
-1. Understand the query 5 given below.
-2. Generate input data for the query using [TPCH Data Generation Tool](https://github.com/electrum/tpch-dbgen)
-3. Clone the current repository to your personal github.
-4. Complete the incomplete functions in query5.cpp file
-5. Compile and run the program. Capture the result with single thread and 4 thread.
-6. Share the link of your completed repository in email with below mentioned information.
+## 📌 Overview
+This project implements **TPC-H Query 5** using **C++ with multithreading**.  
+It processes TPCH `.tbl` datasets and calculates revenue grouped by nation.
 
-## Submission (Reply with below information to the assignment email)
-| S.No. | Item          | Description                                                                                                         |
-|--------|---------------|---------------------------------------------------------------------------------------------------------------------|
-| 1      | **GitHub Link**   | Share the GitHub link with your completed code. Make sure the program compiles and produces the same result as mentioned in point 2. |
-| 2      | **Final Result**  | Provide the final result of the query at SF2 (Scale factor 2).                                                      |
-| 3      | **Runtime**       | Share the runtime numbers for both single-threaded and 4-threaded execution.                                        |
-| 4      | **Screenshot**    | Attach a screenshot showing the program running with the result visible.                                            |
+The goal of this project is to demonstrate:
+- Efficient data processing
+- Multithreading using `std::thread`
+- File handling and parsing
+- CMake-based build system
 
->**Note : Submissions without above 4 details would be considered as incomplete** 
+---
 
-## Query 5
-```
-select 
-n_name, 
-sum(l_extendedprice * (1 - l_discount)) as revenue 
-from 
-customer, 
-orders, 
-lineitem, 
-supplier, 
-nation, 
-region 
-where 
-c_custkey = o_custkey 
-and l_orderkey = o_orderkey 
-and l_suppkey = s_suppkey 
-and c_nationkey = s_nationkey 
-and s_nationkey = n_nationkey 
-and n_regionkey = r_regionkey 
-and r_name = 'ASIA' 
-and o_orderdate >= '1994-01-01' 
-and o_orderdate < '1995-01-01' 
-group by 
-n_name 
-order by 
-revenue desc 
-```
+## 🛠 Tech Stack
+- **C++ (C++11)**
+- **Multithreading (std::thread, mutex)**
+- **CMake**
+- **File I/O (CSV/TBL parsing)**
 
-## Prerequisites
-- CMake (version 3.10 or higher)
-- C++ compiler (supporting C++11 or later)
-- [TPCH Data Generation Tool](https://github.com/electrum/tpch-dbgen) : Generate data for query using this tool at scale factor 2 
+---
 
-## Building the Project
-1. Clone the repository:
-   ```bash
-   git clone <repository-url>
-   cd tpch-query5-cpp
-   ```
+## 📂 Project Structure
+tpch-query5/
+├── src/
+│ ├── main.cpp
+│ └── query5.cpp
+├── include/
+│ └── query5.hpp
+├── data/ # TPCH .tbl files (not included)
+├── output/ # result output
+├── CMakeLists.txt
+└── README.md
 
-2. Create a build directory and navigate into it:
-   ```bash
-   mkdir build
-   cd build
-   ```
 
-3. Generate the build files with CMake:
-   ```bash
-   cmake ..
-   ```
+---
 
-4. Compile the project:
-   ```bash
-   make
-   ```
+## ⚙️ Build Instructions
 
-## Running the Program
-### Single-Threaded Execution
-To run the program in single-threaded mode, use the following command:
 ```bash
-./tpch_query5 --r_name ASIA --start_date 1994-01-01 --end_date 1995-01-01 --threads 1 --table_path /path/to/tables --result_path /path/to/results
-```
+mkdir build
+cd build
+cmake ..
+cmake --build .
 
-### Multi-Threaded Execution
-To run the program in multi-threaded mode, specify the number of threads (e.g., 4):
-```bash
-./tpch_query5 --r_name ASIA --start_date 1994-01-01 --end_date 1995-01-01 --threads 4 --table_path /path/to/tables --result_path /path/to/results
-```
+./tpch_query5.exe \
+  --r_name ASIA \
+  --start_date 1995-01-01 \
+  --end_date 1996-01-01 \
+  --threads 4 \
+  --table_path ../data \
+  --result_path ../output
 
-## Generating a Report
-1. Run the program with the desired parameters.
-2. The results will be output to the specified result path.
-3. Analyze the results to compare performance between single-threaded and multi-threaded execution.
+📥 Input Data
 
-## Rationale Behind Speedup
-- **Parallelization**: By dividing the workload among multiple threads, the program can process data concurrently, reducing the overall execution time.
-- **Efficiency**: Multithreading is particularly effective for I/O-bound tasks (like reading data) and CPU-bound tasks (like processing and joining tables).
-- **Scalability**: The speedup is expected to scale with the number of threads, up to the point where the overhead of thread management becomes significant.
+You must provide TPCH .tbl files inside the data/ folder:
 
-## Additional Notes
-- Ensure that the TPCH data is correctly generated and placed in the specified table path.
-- Adjust the number of threads based on your system's capabilities and the size of the dataset.
+data/
+├── customer.tbl
+├── orders.tbl
+├── lineitem.tbl
+├── supplier.tbl
+├── nation.tbl
+├── region.tbl
 
-## Troubleshooting
-If you encounter any issues during build or execution, please check the following:
-- Ensure all dependencies are installed.
-- Verify that the TPCH data is correctly formatted and accessible.
-- Check the command line arguments for correctness.
+📊 Output
+
+Results are written to:
+
+output/result.txt
+
+Example:
+
+CHINA 1800
+INDIA 950
+
+⚡ Features
+Parallel processing using multiple threads
+Efficient file parsing using streams
+Configurable thread count
+Command-line argument support
+Cross-platform build using CMake
+
+🧠 Concepts Demonstrated
+Multithreading & synchronization (mutex)
+Data aggregation
+File-based database processing
+Build automation (CMake)
+CLI design in C++
+🚀 Future Improvements
+Full TPCH Query 5 join logic (region → nation → customer → orders → lineitem)
+Performance optimization using thread-local storage
+Sorting results by revenue
+Large dataset benchmarking
+👨‍💻 Author
+
+Prabhash Nutakki
+
+⭐ Acknowledgements
+TPC-H Benchmark Specification
+C++ Standard Library
+
+
