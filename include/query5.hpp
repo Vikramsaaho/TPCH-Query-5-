@@ -1,20 +1,43 @@
 #ifndef QUERY5_HPP
 #define QUERY5_HPP
 
-#include <string>
 #include <vector>
 #include <map>
+#include <string>
 
-// Function to parse command line arguments
-bool parseArgs(int argc, char* argv[], std::string& r_name, std::string& start_date, std::string& end_date, int& num_threads, std::string& table_path, std::string& result_path);
+// Argument parsing
+bool parseArgs(int argc, char* argv[],
+               std::string& r_name,
+               std::string& start_date,
+               std::string& end_date,
+               int& num_threads,
+               std::string& table_path,
+               std::string& result_path);
 
-// Function to read TPCH data from the specified paths
-bool readTPCHData(const std::string& table_path, std::vector<std::map<std::string, std::string>>& customer_data, std::vector<std::map<std::string, std::string>>& orders_data, std::vector<std::map<std::string, std::string>>& lineitem_data, std::vector<std::map<std::string, std::string>>& supplier_data, std::vector<std::map<std::string, std::string>>& nation_data, std::vector<std::map<std::string, std::string>>& region_data);
+// Load TPCH tables
+bool readTPCHData(const std::string& table_path,
+                  std::vector<std::vector<std::string>>& customer,
+                  std::vector<std::vector<std::string>>& orders,
+                  std::vector<std::vector<std::string>>& lineitem,
+                  std::vector<std::vector<std::string>>& supplier,
+                  std::vector<std::vector<std::string>>& nation,
+                  std::vector<std::vector<std::string>>& region);
 
-// Function to execute TPCH Query 5 using multithreading
-bool executeQuery5(const std::string& r_name, const std::string& start_date, const std::string& end_date, int num_threads, const std::vector<std::map<std::string, std::string>>& customer_data, const std::vector<std::map<std::string, std::string>>& orders_data, const std::vector<std::map<std::string, std::string>>& lineitem_data, const std::vector<std::map<std::string, std::string>>& supplier_data, const std::vector<std::map<std::string, std::string>>& nation_data, const std::vector<std::map<std::string, std::string>>& region_data, std::map<std::string, double>& results);
+// Execute query
+bool executeQuery5(const std::string& r_name,
+                   const std::string& start_date,
+                   const std::string& end_date,
+                   int num_threads,
+                   const std::vector<std::vector<std::string>>& customer,
+                   const std::vector<std::vector<std::string>>& orders,
+                   const std::vector<std::vector<std::string>>& lineitem,
+                   const std::vector<std::vector<std::string>>& supplier,
+                   const std::vector<std::vector<std::string>>& nation,
+                   const std::vector<std::vector<std::string>>& region,
+                   std::map<std::string, double>& results);
 
-// Function to output results to the specified path
-bool outputResults(const std::string& result_path, const std::map<std::string, double>& results);
+// Output results
+bool outputResults(const std::string& result_path,
+                   const std::map<std::string, double>& results);
 
-#endif // QUERY5_HPP 
+#endif
